@@ -1,5 +1,6 @@
 ﻿module D04
 open System.IO
+open System.Text.RegularExpressions
 
 
 type Passport = {
@@ -57,4 +58,39 @@ let firstHalf () =
         p.HairColor.IsSome &&
         p.EyeColor.IsSome &&
         p.PassportID.IsSome
+    ) |> Array.length
+
+let secondHalf () =
+    let passports = getInput "inputs/d04.txt"
+    let inline (>=<) a (b,c) = a >= b && a<= c
+    let validHeight s = 
+        let len = String.length s
+        let um = s.[len - 2 ..]
+        match um with
+        | "cm" -> let h = int s.[.. len - 3] in h >=< (150,193) 
+        | "in" -> let h = int s.[.. len - 3] in h >=< (59,76)
+        | _ -> false
+    let validHairColor s = Regex.IsMatch (s, "\A#[\d|a-f][\d|a-f][\d|a-f][\d|a-f][\d|a-f][\d|a-f]\Z")
+    let validEyeColor s =
+        match s with 
+        | "amb" | "blu" | "brn" | "gry" | "grn" | "hzl" | "oth" -> true
+        | _ -> false
+    let validPassportID s = Regex.IsMatch(s, "\A\d\d\d\d\d\d\d\d\d\Z")
+
+    passports |> Array.filter (fun p -> 
+        p.BirthYear.IsSome &&
+        p.IssueYear.IsSome &&
+        p.ExpirYear.IsSome &&
+        p.Height.IsSome &&
+        p.HairColor.IsSome &&
+        p.EyeColor.IsSome &&
+        p.PassportID.IsSome
+    ) |> Array.filter (fun p ->
+        p.BirthYear.Value >=< (1920,2002) &&
+        p.IssueYear.Value >=< (2010,2020) &&
+        p.ExpirYear.Value >=< (2020,2030) &&
+        validHeight p.Height.Value &&
+        validHairColor p.HairColor.Value &&
+        validEyeColor p.EyeColor.Value &&
+        validPassportID p.PassportID.Value
     ) |> Array.length
