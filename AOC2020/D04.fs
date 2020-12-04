@@ -1,7 +1,5 @@
 ﻿module D04
 open System.IO
-open FParsec
-
 
 
 type Passport = {
