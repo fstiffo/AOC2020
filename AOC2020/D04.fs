@@ -18,8 +18,8 @@ let getInput filename =
     let input = File.ReadAllText(filename)
     let passportStrs = input.Split("\n\n")
 
-    let getPassport (passport: string) =
-        let mutable p =
+    let getPassport (sequence: string) =
+        let mutable passport =
             { BirthYear = None
               IssueYear = None
               ExpirYear = None
@@ -29,24 +29,24 @@ let getInput filename =
               PassportID = None
               CountryID = None }
 
-        passport.Split(' ', '\n')
+        sequence.Split(' ', '\n')
         |> Array.iter
-            (fun field ->
-                let kv = field.Split(':')
+            (fun keyValuePair ->
+                let kv = keyValuePair.Split(':')
                 let kv' = (kv.[0], kv.[1])
 
                 match kv' with
-                | ("byr", v) -> p.BirthYear <- Some(int v)
-                | ("iyr", v) -> p.IssueYear <- Some(int v)
-                | ("eyr", v) -> p.ExpirYear <- Some(int v)
-                | ("hgt", v) -> p.Height <- Some v
-                | ("hcl", v) -> p.HairColor <- Some v
-                | ("ecl", v) -> p.EyeColor <- Some v
-                | ("pid", v) -> p.PassportID <- Some v
-                | ("cid", v) -> p.CountryID <- Some v
+                | ("byr", v) -> passport.BirthYear <- Some(int v)
+                | ("iyr", v) -> passport.IssueYear <- Some(int v)
+                | ("eyr", v) -> passport.ExpirYear <- Some(int v)
+                | ("hgt", v) -> passport.Height <- Some v
+                | ("hcl", v) -> passport.HairColor <- Some v
+                | ("ecl", v) -> passport.EyeColor <- Some v
+                | ("pid", v) -> passport.PassportID <- Some v
+                | ("cid", v) -> passport.CountryID <- Some v
                 | _ -> ())
 
-        p
+        passport
 
     passportStrs |> Array.map getPassport
 
