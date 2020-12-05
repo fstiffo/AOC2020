@@ -63,7 +63,6 @@ let firstHalf () =
     |> Array.length
 
 let secondHalf () =
-    let passports = getInput "inputs/d04.txt"
     let inline (>=<) a (b,c) = a >= b && a<= c
     let validHeight s = 
         let len = String.length s
@@ -79,6 +78,7 @@ let secondHalf () =
         | _ -> false
     let validPassportID s = Regex.IsMatch(s, "\A\d\d\d\d\d\d\d\d\d\Z")
 
+    let passports = getInput "inputs/d04.txt"
     passports 
     |> Array.filter (fun p -> 
         p.BirthYear.IsSome &&
