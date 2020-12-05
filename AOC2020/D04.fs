@@ -29,7 +29,8 @@ let getInput filename =
             PassportID = None;
             CountryID = None;
             }
-        passport.Split (' ', '\n') |> Array.iter (fun field ->
+        passport.Split (' ', '\n') 
+        |> Array.iter (fun field ->
             let kv = field.Split(':')
             let kv' = (kv.[0], kv.[1])
             match kv' with
@@ -50,15 +51,16 @@ let getInput filename =
 let firstHalf () = 
     let passports = getInput "inputs/d04.txt"
     // printfn "%A" passports
-    passports |> Array.filter (fun p -> 
+    passports 
+    |> Array.filter (fun p -> 
         p.BirthYear.IsSome &&
         p.IssueYear.IsSome &&
         p.ExpirYear.IsSome &&
         p.Height.IsSome &&
         p.HairColor.IsSome &&
         p.EyeColor.IsSome &&
-        p.PassportID.IsSome
-    ) |> Array.length
+        p.PassportID.IsSome)
+    |> Array.length
 
 let secondHalf () =
     let passports = getInput "inputs/d04.txt"
@@ -77,20 +79,21 @@ let secondHalf () =
         | _ -> false
     let validPassportID s = Regex.IsMatch(s, "\A\d\d\d\d\d\d\d\d\d\Z")
 
-    passports |> Array.filter (fun p -> 
+    passports 
+    |> Array.filter (fun p -> 
         p.BirthYear.IsSome &&
         p.IssueYear.IsSome &&
         p.ExpirYear.IsSome &&
         p.Height.IsSome &&
         p.HairColor.IsSome &&
         p.EyeColor.IsSome &&
-        p.PassportID.IsSome
-    ) |> Array.filter (fun p ->
+        p.PassportID.IsSome)
+    |> Array.filter (fun p ->
         p.BirthYear.Value >=< (1920,2002) &&
         p.IssueYear.Value >=< (2010,2020) &&
         p.ExpirYear.Value >=< (2020,2030) &&
         validHeight p.Height.Value &&
         validHairColor p.HairColor.Value &&
         validEyeColor p.EyeColor.Value &&
-        validPassportID p.PassportID.Value
-    ) |> Array.length
+        validPassportID p.PassportID.Value)
+    |> Array.length
