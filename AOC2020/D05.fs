@@ -30,8 +30,8 @@ let secondHalf () =
         |> Array.map (fun (row, col) -> row * 8 + col ) // calculates seat ID
         |> Array.sort |> Array.indexed
     sortedIDs 
-        |> Array.find (fun (i, id) -> 
+        |> Array.find (fun (i, id) -> // find missing ID
         let _, nextID = sortedIDs.[i + 1]
-        nextID <> (id + 1)
+        nextID <> (id + 1) 
         ) 
         |> snd |> ((+) 1)
