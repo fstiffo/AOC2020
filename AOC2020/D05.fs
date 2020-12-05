@@ -9,8 +9,8 @@ let firstHalf () =
         System.Convert.ToByte(rowBinPart,2), System.Convert.ToByte(colBinPart,2)
         )
     binaryPartions |> Array.map (fun (rowBinPart, colBinPart) ->
-        let row, col = rowBinPart &&& byte(127), colBinPart &&& byte(7)
-        int(row) * 8 + int(col)
+        let row, col = rowBinPart &&& byte(127), colBinPart &&& byte(7) // find row and column of the seat
+        int(row) * 8 + int(col) // calculates seat ID
         ) |> Array.max
         
 
@@ -21,17 +21,17 @@ let secondHalf () =
         let colBinPart = l.[7..].Replace('R','1').Replace('L','0')
         System.Convert.ToByte(rowBinPart,2), System.Convert.ToByte(colBinPart,2)
         )
-    let sortedIds = 
+    let sortedIDs = 
         binaryPartions
         |> Array.map (fun (rowBinPart, colBinPart) ->
-                let row, col = rowBinPart &&& byte(127), colBinPart &&& byte(7)
+                let row, col = rowBinPart &&& byte(127), colBinPart &&& byte(7) // find row and column of the seat
                 int(row), int(col))
-        |> Array.filter (fun (row,_) -> row > 0 && row < 127) 
-        |> Array.map (fun (row, col) -> row * 8 + col )
+        |> Array.filter (fun (row,_) -> row > 0 && row < 127) // removes very front and very back rows
+        |> Array.map (fun (row, col) -> row * 8 + col ) // calculates seat ID
         |> Array.sort |> Array.indexed
-    sortedIds 
+    sortedIDs 
         |> Array.find (fun (i, id) -> 
-        let _, nextId = sortedIds.[i+1]
-        nextId <> (id + 1)
+        let _, nextID = sortedIDs.[i + 1]
+        nextID <> (id + 1)
         ) 
         |> snd |> ((+) 1)
